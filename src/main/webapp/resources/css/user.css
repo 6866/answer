@@ -1,0 +1,15 @@
+body{ margin:0;
+	padding:0;} 
+.layui-tab{
+	
+margin:0 auto; 
+width:500px;
+}
+.answer{
+	text-align:center
+}
+.layui-tab-content{
+	width:500px;
+	height:600px;
+	overflow:auto;
+}

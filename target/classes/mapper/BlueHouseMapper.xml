@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+ -->
+<mapper namespace="org.intermediary.mapper.BlueHouseMapper">
+    <resultMap id="findBlueHouse" type="org.intermediary.entity.BlueHouse">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="house_Name" jdbcType="VARCHAR" property="house_Name"/>
+        <result column="floor" jdbcType="VARCHAR" property="floor"/>
+        <result column="house_Type" jdbcType="VARCHAR" property="house_Type"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="certificate" jdbcType="VARCHAR" property="certificate"/>
+        <result column="house_Intermediary" jdbcType="VARCHAR" property="house_Intermediary"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="create_Time" jdbcType="VARCHAR" property="create_Time"/>
+        <result column="area" jdbcType="VARCHAR" property="area"/>
+    </resultMap>
+
+    <insert id="insertBlueHouse"  parameterType="list" >
+        INSERT INTO blueHouse (house_Name,floor,house_Type,price,remarks,certificate,house_Intermediary,phone,create_Time,area,status) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.house_Name},#{item.floor},#{item.house_Type},#{item.price},#{item.remarks},#{item.certificate},#{item.house_Intermediary}, #{item.phone},#{item.create_Time},#{item.area},#{item.status})
+        </foreach>
+    </insert>
+    <delete id="deleteAll">
+        DELETE FROM blueHouse
+    </delete>
+
+    <select id="findBlueHouseAllByPage" parameterType="org.intermediary.entity.BlueHouse" resultMap="findBlueHouse">
+        SELECT house_Name,floor,house_Type,price,remarks,certificate,house_Intermediary,phone,create_Time,area FROM blueHouse
+        <where>
+            <if test="blueHouse.status != null">
+                and status = ${blueHouse.status}
+            </if>
+
+            <if test="blueHouse.house_Name != null and !&quot;&quot;.equals(blueHouse.house_Name)">
+                and house_Name LIKE '%${blueHouse.house_Name}%'
+            </if>
+            <if test="blueHouse.floor != null and !&quot;&quot;.equals(blueHouse.floor)">
+                and floor LIKE '%${blueHouse.floor}%'
+            </if>
+            <if test="blueHouse.areaLeft != null">
+                and area &gt;= ${blueHouse.areaLeft}
+            </if>
+            <if test="blueHouse.areaRight != null">
+                and area &lt;= ${blueHouse.areaRight}
+            </if>
+
+            <if test="blueHouse.priceLeft != null">
+                and price &gt;= ${blueHouse.priceLeft}
+            </if>
+            <if test="blueHouse.priceRight != null">
+                and price &lt;= ${blueHouse.priceRight}
+            </if>
+        </where>
+       
+    </select>
+
+</mapper>
